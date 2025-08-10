@@ -1,5 +1,5 @@
 "use client";
-import { supabaseBrowser } from "@/lib/supabase";
+import { supabaseBrowser } from "@/lib/supabase-browser";
 import { Button } from "@/components/ui/button";
 export default function LoginPage(){
   const login = async () => {
