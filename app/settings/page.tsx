@@ -1,4 +1,4 @@
-export default function SettingsPage(){
+export default function SettingsPage() {
   return (
     <main className="mx-auto max-w-7xl p-4 md:p-6">
       <h1 className="text-xl md:text-2xl font-bold mb-2">ตั้งค่าระบบ</h1>
