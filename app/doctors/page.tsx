@@ -6,9 +6,7 @@ export default async function DoctorsPage() {
   const sb = supabaseServer();
   const { data: doctors } = await sb
     .from("users")
-    .select(
-      "id, full_name, short_name, email, role, doctor_group, weekly_night_quota, day_off_1, day_off_2, day_off_3, not_interested_in_sur"
-    )
+    .select("id, full_name, short_name, email, role, doctor_group, weekly_night_quota, day_off_1, day_off_2, day_off_3, not_interested_in_sur")
     .order("full_name", { ascending: true });
 
   return (
@@ -17,7 +15,6 @@ export default async function DoctorsPage() {
         <h1 className="text-xl md:text-2xl font-bold">จัดการข้อมูลแพทย์</h1>
         <AddDoctor />
       </div>
-
       <div className="rounded-xl bg-white p-4 shadow-sm border overflow-auto">
         <table className="w-full text-sm">
           <thead className="bg-slate-50">
@@ -42,9 +39,7 @@ export default async function DoctorsPage() {
                 <td className="p-2">{d.role}</td>
                 <td className="p-2">{d.weekly_night_quota ?? "-"}</td>
                 <td className="p-2">
-                  {[d.day_off_1, d.day_off_2, d.day_off_3]
-                    .filter(Boolean)
-                    .join(", ")}
+                  {[d.day_off_1, d.day_off_2, d.day_off_3].filter(Boolean).join(", ")}
                 </td>
                 <td className="p-2">
                   {d.not_interested_in_sur ? "ไม่สนใจ" : "สนใจ"}
