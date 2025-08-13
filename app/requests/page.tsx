@@ -3,10 +3,25 @@ import { useState, useEffect } from "react";
 import { supabaseBrowser } from "@/lib/supabase-client";
 
 export default function RequestsPage() {
-  const [items,setItems] = useState([]);
-  const [newOpen,setNewOpen] = useState(false);
-  const [newForm,setNewForm] = useState({ doctor_id:"", type:"leave", start_date:"", end_date:"", reason:"" });
-  const [doctors,setDoctors] = useState([]);
+  const [items, setItems] = useState<any[]>([]);
+  const [newOpen, setNewOpen] = useState(false);
+  const [newForm, setNewForm] = useState({
+    doctor_id: "",
+    type: "day_off",
+    start_date: "",
+    end_date: "",
+    reason: "",
+  });
+  const [doctors, setDoctors] = useState<any[]>([]);
+
+  async function load() {
+    const sb = supabaseBrowser();
+    const { data } = await sb
+      .from("requests")
+      .select("id, doctor_id, type, start_date, end_date, status, payload")
+      .order("created_at", { ascending: false });
+    setItems(data || []);
+  }
 
   // โหลดรายการคำร้องและรายชื่อแพทย์
   useEffect(() => {
@@ -22,19 +37,22 @@ export default function RequestsPage() {
   async function saveNewRequest() {
     const payload:any = {};
     if (newForm.reason) payload.reason = newForm.reason;
-    await fetch("/api/requests/create", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({
-        type: newForm.type,
-        start_date: newForm.start_date || null,
-        end_date: newForm.end_date || null,
-        doctor_id: newForm.doctor_id,
-        payload,
-      }),
+    const sb = supabaseBrowser();
+    await sb.from("requests").insert({
+      type: newForm.type,
+      start_date: newForm.start_date || null,
+      end_date: newForm.end_date || null,
+      doctor_id: newForm.doctor_id,
+      payload,
     });
     setNewOpen(false);
-    setNewForm({ doctor_id:"", type:"leave", start_date:"", end_date:"", reason:"" });
+    setNewForm({
+      doctor_id: "",
+      type: "day_off",
+      start_date: "",
+      end_date: "",
+      reason: "",
+    });
     await load();
   }
 
